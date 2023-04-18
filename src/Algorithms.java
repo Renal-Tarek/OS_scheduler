@@ -73,8 +73,7 @@ public class Algorithms {
     
 }
      
-     
-     public static ArrayList<ResultProcess> fcfs(ArrayList<Process> p) {
+   public static ArrayList<ResultProcess> fcfs(ArrayList<Process> p) {
         Process.setCompare_type(0);
         Collections.sort(p);
         int timer =p.get(0).getArriving_time();
