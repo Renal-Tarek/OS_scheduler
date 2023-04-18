@@ -74,22 +74,17 @@ public class Algorithms {
 }
      
      
-     public static ArrayList<Job> fcfs(ArrayList<Process> p) {
+     public static ArrayList<ResultProcess> fcfs(ArrayList<Process> p) {
         Process.setCompare_type(0);
         Collections.sort(p);
-        Process.setCompare_type(1);
-        float timer = p.get(0).getArrival_time();
-        ArrayList<Job> jobs = new ArrayList<Job>();
-        for (int i = 0; i < p.size(); i++) {
-            Job j = new Job(p.get(i).getProcess_number(), timer, p.get(i).getBurst_time(), p.get(i));
+        int timer =p.get(0).getArriving_time();
+        ArrayList<ResultProcess> jobs = new ArrayList<ResultProcess>();
+        for(int i=0;i<p.size();i++)
+        {
+            ResultProcess j = new ResultProcess(p.get(i).getProsess_name(), timer, p.get(i).getBurst_time(), p.get(i));
             jobs.add(j);
             p.get(i).setFinish_time(timer + p.get(i).getBurst_time());
             timer += p.get(i).getBurst_time();
-            if (i < p.size() - 1 && timer < p.get(i + 1).getArrival_time()) {
-                j = empty(timer, i + 1, p);
-                timer += j.getBurst_time();
-                jobs.add(j);
-            }
         }
         return jobs;
     }
