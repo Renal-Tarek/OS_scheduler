@@ -116,7 +116,7 @@ public class Process  implements Comparable<Process>
     {
         // compare with respect to arrival time ascendengly
         if(compare_type == 0)
-            return (int)(this.getArriving_time() - p.getArriving_time());
+            return (this.getArriving_time() - p.getArriving_time());
         
         // compare with respect to burst time ascendengly
         else if(compare_type == 1)
@@ -127,8 +127,6 @@ public class Process  implements Comparable<Process>
             
         else 
             return (int)(this.getPriority() - p.getPriority()); 
-    }
-    
-
+       }
     
 }
