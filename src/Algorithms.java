@@ -23,56 +23,6 @@ import java.util.Scanner;
  */
 public class Algorithms {
     
-    public static float total_turnAround_time;
-    public static float total_waiting_time;
-    
-    
-    private static Job empty(float timer, int i, ArrayList<Process> p) {
-        Job j = new Job(-1, timer, p.get(i).getArrival_time() - timer);
-        return j;
-    }
-    
-     public static ArrayList<Job> RR(ArrayList<Process> p, int qt) {
-        Process.setCompare_type(0);
-        Collections.sort(p);
-        Queue<Process> q = new LinkedList<>();
-        ArrayList<Job> jobs = new ArrayList<Job>();
-        float timer = p.get(0).getArrival_time();
-        Job j;
-        int i = 0;
-        while (i < p.size() || !q.isEmpty()) {
-            while (i < p.size() && timer >= p.get(i).getArrival_time()) {
-                q.add(p.get(i));
-                i++;
-            }
-            if (q.isEmpty()) {
-                j = empty(timer, i, p);
-                timer += j.getBurst_time();
-                jobs.add(j);
-            } else{
-                if (q.peek().getRemaining_burst_time()> qt) {
-                    j = new Job(q.peek().getProcess_number(), timer, qt, q.peek());
-                    jobs.add(j);
-                    q.peek().setRemaining_burst_time(q.peek().getRemaining_burst_time()- qt);
-                    timer += j.getBurst_time();
-                    while (i < p.size() && timer >= p.get(i).getArrival_time()) {
-                        q.add(p.get(i));
-                        i++;
-                    }
-                    q.add(q.peek());
-                } else {
-                    j = new Job(q.peek().getProcess_number(), timer, q.peek().getRemaining_burst_time(), q.peek());
-                    jobs.add(j);
-                    timer += j.getBurst_time();
-                }
-                q.poll();                
-            
-        }
-    }
-        return jobs ;
-    
-}
-     
    public static ArrayList<ResultProcess> fcfs(ArrayList<Process> p) {
         Process.setCompare_type(0);
         Collections.sort(p);
@@ -87,26 +37,43 @@ public class Algorithms {
         }
         return jobs;
     }
-     
-      public static void timing (ArrayList<Job> jobs , ArrayList<Process> ps){
-        for(Job j: jobs){
-            if(j.getJob_number()== -1) continue;
-            float finish_time = j.getStart_time()+j.getBurst_time();
-            j.getP().setFinish_time(finish_time);
-        }
-        total_turnAround_time = 0;
-        total_waiting_time = 0;
+    
+    
+     public static ArrayList<ResultProcess> RR(ArrayList<Process> p, int qt) {
+        Process.setCompare_type(0);
+        Collections.sort(p);
+        Queue<Process> q = new LinkedList<>();
+        ArrayList<ResultProcess> jobs = new ArrayList<ResultProcess>();
+        int timer = p.get(0).getArriving_time();
+        ResultProcess j;
+        int i = 0;
+        while (i < p.size() || !q.isEmpty()) {
+            while (i < p.size() && timer >= p.get(i).getArriving_time()) {
+                q.add(p.get(i));
+                i++;
+            }
+              if (q.peek().getRemaining_burst_time()> qt) {
+                    j = new ResultProcess(q.peek().getProsess_name(), timer, qt, q.peek());
+                    jobs.add(j);
+                    q.peek().setRemaining_burst_time(q.peek().getRemaining_burst_time()- qt);
+                    timer += j.getBurst_time();
+                    while (i < p.size() && timer >= p.get(i).getArriving_time()) {
+                        q.add(p.get(i));
+                        i++;
+                    }
+                    q.add(q.peek());
+                }
+              else {
+                    j = new ResultProcess(q.peek().getProsess_name(), timer, q.peek().getRemaining_burst_time(), q.peek());
+                    jobs.add(j);
+                    timer += j.getBurst_time();
+                }
+                q.poll();                
+            
         
-        for(Process p:ps){
-            float turnAround_time = p.getFinish_time() - p.getArrival_time();
-            float waiting_time = turnAround_time - p.getBurst_time();
-            p.setTurnAround_time(turnAround_time);
-            p.setWaiting_time(waiting_time);
-            total_turnAround_time += turnAround_time;
-            total_waiting_time += waiting_time;
-        }
     }
-      
+        return jobs ;
+     }
     
     
 }
